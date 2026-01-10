@@ -92,4 +92,23 @@ class TaskController extends Controller
 
         return response()->noContent();
     }
+
+    public function reorder(Request $request)
+    {
+        $validated = $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|exists:tasks,id',
+            'items.*.status_id' => 'required|exists:project_statuses,id',
+            'items.*.order' => 'required|integer',
+        ]);
+
+        foreach ($validated['items'] as $item) {
+            Task::where('id', $item['id'])->update([
+                'status_id' => $item['status_id'],
+                'order' => $item['order'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Tasks reordered successfully']);
+    }
 }
