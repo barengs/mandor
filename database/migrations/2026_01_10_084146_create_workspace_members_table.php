@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workspace_members', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('role')->default('member'); // e.g., admin, member
+            $table->primary(['workspace_id', 'user_id']);
             $table->timestamps();
         });
     }

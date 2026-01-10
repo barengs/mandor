@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('project_statuses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('color');
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }
