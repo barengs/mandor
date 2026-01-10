@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectStatusController;
 use App\Http\Controllers\Api\TaskController;
@@ -22,6 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/project-statuses/reorder', [ProjectStatusController::class, 'reorder']);
     Route::post('/tasks/reorder', [TaskController::class, 'reorder']);
     Route::apiResource('tasks', TaskController::class);
+
+    Route::apiResource('comments', CommentController::class)->only(['index', 'store', 'destroy']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::get('/user', function (Request $request) {
