@@ -20,6 +20,7 @@ class TaskResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'priority' => $this->priority,
+            'start_date' => $this->start_date,
             'due_date' => $this->due_date,
             'status' => new ProjectStatusResource($this->whenLoaded('status')),
             'creator' => new UserResource($this->whenLoaded('creator')),

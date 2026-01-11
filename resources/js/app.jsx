@@ -1,0 +1,95 @@
+import './bootstrap';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+// Layouts
+import GuestLayout from './layouts/GuestLayout';
+import AppLayout from './layouts/AppLayout';
+
+// Pages
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import Dashboard from './pages/Dashboard';
+import WorkspaceList from './pages/workspaces/WorkspaceList';
+import WorkspaceDetail from './pages/workspaces/WorkspaceDetail';
+import WorkspaceMembers from './pages/workspaces/WorkspaceMembers';
+import ProjectBoard from './pages/projects/ProjectBoard';
+import UserManagement from './pages/users/UserManagement';
+import UserDetail from './pages/users/UserDetail';
+import RoleManagement from './pages/users/RoleManagement';
+
+const queryClient = new QueryClient();
+
+const ProtectedRoute = ({ children }) => {
+    const { user, isLoading } = useAuth();
+    if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950"><div className="animate-spin h-8 w-8 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>;
+    if (!user) return <Navigate to="/login" />;
+    return <AppLayout>{children}</AppLayout>;
+};
+
+const GuestRoute = ({ children }) => {
+    const { user, isLoading } = useAuth();
+    if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950"><div className="animate-spin h-8 w-8 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>;
+    if (user) return <Navigate to="/dashboard" />;
+    return children;
+};
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Navigate to="/dashboard" replace />,
+    },
+    {
+        path: '/login',
+        element: <GuestRoute><GuestLayout><Login /></GuestLayout></GuestRoute>,
+    },
+    {
+        path: '/register',
+        element: <GuestRoute><GuestLayout><Register /></GuestLayout></GuestRoute>,
+    },
+    {
+        path: '/dashboard',
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
+    },
+    {
+        path: '/workspaces',
+        element: <ProtectedRoute><WorkspaceList /></ProtectedRoute>,
+    },
+    {
+        path: '/workspaces/:id',
+        element: <ProtectedRoute><WorkspaceDetail /></ProtectedRoute>,
+    },
+    {
+        path: '/workspaces/:id/members',
+        element: <ProtectedRoute><WorkspaceMembers /></ProtectedRoute>,
+    },
+    {
+        path: '/projects/:id',
+        element: <ProtectedRoute><ProjectBoard /></ProtectedRoute>,
+    },
+    {
+        path: '/users',
+        element: <ProtectedRoute><UserManagement /></ProtectedRoute>,
+    },
+    {
+        path: '/users/:id',
+        element: <ProtectedRoute><UserDetail /></ProtectedRoute>,
+    },
+    {
+        path: '/roles',
+        element: <ProtectedRoute><RoleManagement /></ProtectedRoute>,
+    },
+]);
+
+ReactDOM.createRoot(document.getElementById('app')).render(
+    <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
+        </QueryClientProvider>
+    </React.StrictMode>
+);

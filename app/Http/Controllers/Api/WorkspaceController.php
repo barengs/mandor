@@ -11,8 +11,19 @@ class WorkspaceController extends Controller
 {
     public function index(Request $request)
     {
-        // Return workspaces the user belongs to (including owned)
-        return WorkspaceResource::collection($request->user()->workspaces()->with('owner')->get());
+        $user = $request->user();
+        
+        // Get workspaces user owns or is a member of
+        $ownedWorkspaceIds = $user->ownedWorkspaces()->pluck('id');
+        $memberWorkspaceIds = $user->workspaces()->pluck('workspaces.id');
+        $allWorkspaceIds = $ownedWorkspaceIds->merge($memberWorkspaceIds)->unique();
+        
+        $workspaces = Workspace::whereIn('id', $allWorkspaceIds)
+            ->with('owner')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+            
+        return WorkspaceResource::collection($workspaces);
     }
 
     public function store(Request $request)

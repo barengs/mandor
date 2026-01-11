@@ -34,6 +34,7 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|in:Low,Medium,High,Urgent',
+            'start_date' => 'nullable|date',
             'due_date' => 'nullable|date',
             'assignee_ids' => 'nullable|array',
             'assignee_ids.*' => 'exists:users,id',
@@ -49,6 +50,7 @@ class TaskController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'priority' => $validated['priority'],
+            'start_date' => $validated['start_date'] ?? null,
             'due_date' => $validated['due_date'] ?? null,
         ]);
 
@@ -72,6 +74,7 @@ class TaskController extends Controller
             'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'sometimes|in:Low,Medium,High,Urgent',
+            'start_date' => 'nullable|date',
             'due_date' => 'nullable|date',
             'assignee_ids' => 'sometimes|array',
             'assignee_ids.*' => 'exists:users,id',

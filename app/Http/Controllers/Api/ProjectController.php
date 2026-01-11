@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use App\Models\ProjectStatus;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -33,6 +34,22 @@ class ProjectController extends Controller
         // TODO: Authorization
 
         $project = Project::create($validated);
+
+        // Create default statuses
+        $defaultStatuses = [
+            ['name' => 'To Do', 'color' => '#6B7280', 'order' => 1],
+            ['name' => 'In Progress', 'color' => '#3B82F6', 'order' => 2],
+            ['name' => 'Code Review', 'color' => '#8B5CF6', 'order' => 3],
+            ['name' => 'QA', 'color' => '#F59E0B', 'order' => 4],
+            ['name' => 'Done', 'color' => '#10B981', 'order' => 5],
+        ];
+
+        foreach ($defaultStatuses as $status) {
+            ProjectStatus::create([
+                'project_id' => $project->id,
+                ...$status,
+            ]);
+        }
 
         return new ProjectResource($project);
     }

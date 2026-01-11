@@ -13,11 +13,13 @@ class Task extends Model
         'title',
         'description',
         'priority',
+        'start_date',
         'due_date',
         'order',
     ];
 
     protected $casts = [
+        'start_date' => 'datetime',
         'due_date' => 'datetime',
     ];
 
