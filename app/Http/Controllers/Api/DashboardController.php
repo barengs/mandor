@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
-use App\Http\Resources\WorkspaceResource;
 use App\Models\Task;
 use App\Models\Workspace;
 use Illuminate\Http\Request;
@@ -20,9 +19,10 @@ class DashboardController extends Controller
         $memberWorkspaceIds = $user->workspaces()->pluck('workspaces.id');
         $allWorkspaceIds = $ownedWorkspaceIds->merge($memberWorkspaceIds)->unique();
         
-        // 1. Tasks in user's workspaces (Today & Overdue)
-        $today = now()->startOfDay();
+        // Use Carbon for consistent date handling
+        $today = now()->toDateString();
         
+        // Today's Tasks
         $todaysTasks = Task::whereHas('project', function($q) use ($allWorkspaceIds) {
                 $q->whereIn('workspace_id', $allWorkspaceIds);
             })
@@ -30,23 +30,49 @@ class DashboardController extends Controller
             ->whereDate('due_date', $today)
             ->get();
             
+        // Overdue Tasks
         $overdueTasks = Task::whereHas('project', function($q) use ($allWorkspaceIds) {
                 $q->whereIn('workspace_id', $allWorkspaceIds);
             })
             ->with(['status', 'project'])
-            ->where('due_date', '<', now())
-            ->whereDoesntHave('status', function($q) {
-                $q->where('name', 'like', '%Done%')
-                  ->orWhere('name', 'like', '%Complete%');
+            ->whereDate('due_date', '<', $today)
+            ->whereHas('status', function($q) {
+                $q->where('name', 'not like', '%Done%')
+                  ->where('name', 'not like', '%Complete%');
             })
             ->get();
 
-        // 2. Recent Workspaces (owned + member)
+        // Recent Workspaces with counts including todo
         $recentWorkspaces = Workspace::whereIn('id', $allWorkspaceIds)
             ->with('owner')
+            ->withCount('projects')
             ->orderBy('updated_at', 'desc')
             ->take(3)
-            ->get();
+            ->get()
+            ->map(function($workspace) {
+                $taskCount = Task::whereHas('project', function($q) use ($workspace) {
+                    $q->where('workspace_id', $workspace->id);
+                })->count();
+                
+                // Count todo tasks (status name like 'To Do')
+                $todoCount = Task::whereHas('project', function($q) use ($workspace) {
+                    $q->where('workspace_id', $workspace->id);
+                })->whereHas('status', function($q) {
+                    $q->where('name', 'like', '%To Do%');
+                })->count();
+                
+                return [
+                    'id' => $workspace->id,
+                    'name' => $workspace->name,
+                    'owner' => $workspace->owner ? [
+                        'id' => $workspace->owner->id,
+                        'name' => $workspace->owner->name,
+                    ] : null,
+                    'projects_count' => $workspace->projects_count,
+                    'tasks_count' => $taskCount,
+                    'todo_count' => $todoCount,
+                ];
+            });
             
         return response()->json([
             'greeting' => 'Welcome back, ' . $user->name,
@@ -56,7 +82,7 @@ class DashboardController extends Controller
             ],
             'todays_tasks' => TaskResource::collection($todaysTasks),
             'overdue_tasks' => TaskResource::collection($overdueTasks),
-            'recent_workspaces' => WorkspaceResource::collection($recentWorkspaces),
+            'recent_workspaces' => $recentWorkspaces,
         ]);
     }
 }

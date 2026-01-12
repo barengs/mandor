@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
-import { Calendar, AlertTriangle, Clock, ArrowRight } from 'lucide-react';
+import { Calendar, AlertTriangle, Clock, ArrowRight, FolderKanban, CheckSquare, ListTodo } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const fetchDashboard = async () => {
@@ -74,7 +74,7 @@ const Dashboard = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
@@ -176,6 +176,20 @@ const Dashboard = () => {
                                 <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                                     Owner: {workspace.owner?.name}
                                 </p>
+                                <div className="flex items-center gap-4 mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                                    <div className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400">
+                                        <FolderKanban className="w-4 h-4" />
+                                        <span>{workspace.projects_count} Projects</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400">
+                                        <CheckSquare className="w-4 h-4" />
+                                        <span>{workspace.tasks_count} Tasks</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-sm text-orange-600 dark:text-orange-400">
+                                        <ListTodo className="w-4 h-4" />
+                                        <span>{workspace.todo_count} To Do</span>
+                                    </div>
+                                </div>
                             </Link>
                         ))
                     ) : (

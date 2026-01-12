@@ -1,11 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { useParams, Link } from 'react-router-dom';
-import { Plus, ArrowLeft, Calendar, User, Flag, MoreHorizontal, X, List, LayoutGrid, GanttChartSquare } from 'lucide-react';
+import { Plus, ArrowLeft, Calendar, User, Flag, MoreHorizontal, X, List, LayoutGrid, GanttChartSquare, Layers, Settings, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import KanbanBoard from '@/components/KanbanBoard';
 import GanttChart from '@/components/GanttChart';
+import SprintBoard from '@/components/SprintBoard';
 import TaskDetail from '@/components/TaskDetail';
+import ProjectChat from '@/components/ProjectChat';
 
 const fetchProject = async (id) => {
     const { data } = await api.get(`/projects/${id}`);
@@ -243,6 +245,7 @@ const ProjectBoard = () => {
     const [selectedTask, setSelectedTask] = useState(null); // For viewing task details
     const [viewMode, setViewMode] = useState('kanban'); // 'list' or 'kanban'
     const [defaultStatusId, setDefaultStatusId] = useState(null);
+    const [showChat, setShowChat] = useState(false);
 
     const { data: project, isLoading: projLoading } = useQuery({
         queryKey: ['project', id],
@@ -309,6 +312,22 @@ const ProjectBoard = () => {
                     <span className="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs font-mono rounded">
                         {project?.key}
                     </span>
+                    {/* Sprint Toggle */}
+                    <button
+                        onClick={() => {
+                            api.put(`/projects/${id}`, { has_sprints: !project?.has_sprints })
+                                .then(() => queryClient.invalidateQueries(['project', id]));
+                        }}
+                        className={`flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded border transition-colors ${
+                            project?.has_sprints
+                                ? 'bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
+                                : 'bg-zinc-50 text-zinc-500 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700 hover:border-green-300'
+                        }`}
+                        title={project?.has_sprints ? 'Sprints enabled' : 'Click to enable sprints'}
+                    >
+                        <Layers className="w-3 h-3" />
+                        {project?.has_sprints ? 'Sprints On' : 'Enable Sprints'}
+                    </button>
                 </div>
                 <div className="flex items-center gap-3">
                     {/* View Toggle */}
@@ -346,7 +365,27 @@ const ProjectBoard = () => {
                             <GanttChartSquare className="w-4 h-4" />
                             Gantt
                         </button>
+                        {project?.has_sprints && (
+                            <button
+                                onClick={() => setViewMode('sprint')}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                                    viewMode === 'sprint'
+                                        ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
+                                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                                }`}
+                            >
+                                <Layers className="w-4 h-4" />
+                                Sprints
+                            </button>
+                        )}
                     </div>
+                    <button
+                        onClick={() => setShowChat(true)}
+                        className="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-medium rounded-lg transition-colors"
+                    >
+                        <MessageSquare className="w-4 h-4" />
+                        Chat
+                    </button>
                     <button
                         onClick={() => { setEditingTask(null); setDefaultStatusId(null); setShowModal(true); }}
                         className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors"
@@ -372,6 +411,13 @@ const ProjectBoard = () => {
                 <GanttChart
                     statuses={statuses || []}
                     tasks={tasks || []}
+                    onTaskClick={(task) => setSelectedTask(task)}
+                />
+            )}
+
+            {viewMode === 'sprint' && project?.has_sprints && (
+                <SprintBoard
+                    project={project}
                     onTaskClick={(task) => setSelectedTask(task)}
                 />
             )}
@@ -474,6 +520,13 @@ const ProjectBoard = () => {
                 }}
                 onDelete={handleDeleteTask}
                 statuses={statuses}
+            />
+
+            {/* Project Chat */}
+            <ProjectChat
+                projectId={id}
+                isOpen={showChat}
+                onClose={() => setShowChat(false)}
             />
         </div>
     );

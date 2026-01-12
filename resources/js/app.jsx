@@ -20,6 +20,7 @@ import ProjectBoard from './pages/projects/ProjectBoard';
 import UserManagement from './pages/users/UserManagement';
 import UserDetail from './pages/users/UserDetail';
 import RoleManagement from './pages/users/RoleManagement';
+import Profile from './pages/Profile';
 
 const queryClient = new QueryClient();
 
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
     {
         path: '/roles',
         element: <ProtectedRoute><RoleManagement /></ProtectedRoute>,
+    },
+    {
+        path: '/profile',
+        element: <ProtectedRoute><Profile /></ProtectedRoute>,
     },
 ]);
 

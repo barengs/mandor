@@ -56,6 +56,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
+        $project->load(['statuses', 'sprints']);
         return new ProjectResource($project);
     }
 
@@ -64,6 +65,7 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'key' => 'sometimes|string|max:10|unique:projects,key,' . $project->id,
+            'has_sprints' => 'sometimes|boolean',
         ]);
 
         $project->update($validated);

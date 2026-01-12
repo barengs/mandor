@@ -5,6 +5,7 @@ const AuthContext = createContext({
     user: null,
     login: async () => {},
     logout: async () => {},
+    refetchUser: async () => {},
     isLoading: true,
 });
 
@@ -54,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+        <AuthContext.Provider value={{ user, login, logout, refetchUser: fetchUser, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
