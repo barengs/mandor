@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '@/lib/axios';
+import { useTranslation } from 'react-i18next';
 
 const Register = () => {
+    const { t } = useTranslation();
     const { login } = useAuth();
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -30,7 +32,7 @@ const Register = () => {
             // Auto login after register
             await login({ email, password });
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed');
+            setError(err.response?.data?.message || t('auth.register.failed'));
         } finally {
             setIsLoading(false);
         }
@@ -39,8 +41,8 @@ const Register = () => {
     return (
         <div>
             <div className="mb-8 text-center">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Create an account</h2>
-                <p className="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">Join Mandor to manage your projects</p>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">{t('auth.register.title')}</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">{t('auth.register.subtitle')}</p>
             </div>
             
             {error && (
@@ -53,7 +55,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="name">
-                        Full Name
+                        {t('auth.fields.name')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
@@ -67,13 +69,13 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="email">
-                        Email Address
+                        {t('auth.fields.email')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                         id="email"
                         type="email"
-                        placeholder="john@example.com"
+                        placeholder={t('auth.fields.placeholder_email')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -81,13 +83,13 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="password">
-                        Password
+                         {t('auth.fields.password')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                         id="password"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={t('auth.fields.placeholder_password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -95,13 +97,13 @@ const Register = () => {
                 </div>
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="password_confirmation">
-                        Confirm Password
+                        {t('auth.fields.confirm_password')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                         id="password_confirmation"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={t('auth.fields.placeholder_password')}
                         value={passwordConfirmation}
                         onChange={(e) => setPasswordConfirmation(e.target.value)}
                         required
@@ -119,17 +121,17 @@ const Register = () => {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span>Creating account...</span>
+                            <span>{t('auth.register.submitting')}</span>
                         </>
                     ) : (
-                        'Register'
+                        t('auth.register.submit')
                     )}
                 </button>
 
                 <div className="mt-6 text-center text-sm">
-                    <span className="text-zinc-600 dark:text-zinc-400">Already have an account? </span>
+                    <span className="text-zinc-600 dark:text-zinc-400">{t('auth.register.has_account')} </span>
                     <Link to="/login" className="font-semibold text-orange-600 hover:text-orange-500 dark:text-orange-500 dark:hover:text-orange-400 transition-colors">
-                        Sign In
+                         {t('auth.register.signin')}
                     </Link>
                 </div>
             </form>

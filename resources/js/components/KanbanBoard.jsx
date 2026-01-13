@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
-import { Calendar, Flag, User, GripVertical } from 'lucide-react';
+import { Calendar, Flag, User, GripVertical, MessageSquare } from 'lucide-react';
 import api from '@/lib/axios';
 
 const priorityConfig = {
@@ -26,7 +26,7 @@ const priorityConfig = {
     Urgent: { color: 'bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-300', dot: 'bg-red-500' },
 };
 
-const TaskCard = ({ task, onClick, isDragging }) => {
+const TaskCard = ({ task, onClick, onChatClick, isDragging }) => {
     const formatDate = (date) => {
         if (!date) return null;
         return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -35,11 +35,23 @@ const TaskCard = ({ task, onClick, isDragging }) => {
     return (
         <div
             onClick={() => onClick?.(task)}
-            className={`bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 cursor-pointer hover:border-orange-300 dark:hover:border-orange-700 transition-all ${isDragging ? 'shadow-lg ring-2 ring-orange-500/50' : 'shadow-sm'}`}
+            className={`bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 cursor-pointer hover:border-orange-300 dark:hover:border-orange-700 transition-all group ${isDragging ? 'shadow-lg ring-2 ring-orange-500/50' : 'shadow-sm'}`}
         >
-            <p className="text-sm font-medium text-zinc-900 dark:text-white mb-2">{task.title}</p>
+            <div className="flex items-start justify-between gap-2">
+                <p className="text-sm font-medium text-zinc-900 dark:text-white flex-1">{task.title}</p>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onChatClick?.(task);
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-1 text-zinc-400 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded transition-all"
+                    title="Open chat"
+                >
+                    <MessageSquare className="w-4 h-4" />
+                </button>
+            </div>
             
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap mt-2">
                 {task.priority && (
                     <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${priorityConfig[task.priority]?.color}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${priorityConfig[task.priority]?.dot}`}></span>
@@ -84,7 +96,7 @@ const TaskCard = ({ task, onClick, isDragging }) => {
     );
 };
 
-const SortableTaskCard = ({ task, onClick }) => {
+const SortableTaskCard = ({ task, onClick, onChatClick }) => {
     const {
         attributes,
         listeners,
@@ -102,12 +114,12 @@ const SortableTaskCard = ({ task, onClick }) => {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <TaskCard task={task} onClick={onClick} isDragging={isDragging} />
+            <TaskCard task={task} onClick={onClick} onChatClick={onChatClick} isDragging={isDragging} />
         </div>
     );
 };
 
-const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask }) => {
+const KanbanColumn = ({ status, tasks, onTaskClick, onChatClick, onAddTask }) => {
     const taskIds = tasks.map((t) => t.id);
 
     return (
@@ -132,7 +144,7 @@ const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask }) => {
             <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
                 <div className="space-y-2 min-h-[100px]">
                     {tasks.map((task) => (
-                        <SortableTaskCard key={task.id} task={task} onClick={onTaskClick} />
+                        <SortableTaskCard key={task.id} task={task} onClick={onTaskClick} onChatClick={onChatClick} />
                     ))}
                 </div>
             </SortableContext>
@@ -148,7 +160,7 @@ const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask }) => {
     );
 };
 
-const KanbanBoard = ({ statuses, tasks, projectId, onTaskClick, onAddTask }) => {
+const KanbanBoard = ({ statuses, tasks, projectId, onTaskClick, onChatClick, onAddTask }) => {
     const queryClient = useQueryClient();
     const [activeTask, setActiveTask] = useState(null);
 
@@ -279,6 +291,7 @@ const KanbanBoard = ({ statuses, tasks, projectId, onTaskClick, onAddTask }) => 
                         status={status}
                         tasks={tasksByStatus[status.id] || []}
                         onTaskClick={onTaskClick}
+                        onChatClick={onChatClick}
                         onAddTask={onAddTask}
                     />
                 ))}

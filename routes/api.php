@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProjectBudgetController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectStatusController;
 use App\Http\Controllers\Api\RoleController;
@@ -61,6 +62,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/projects/{project}/messages', [MessageController::class, 'store']);
     Route::delete('/projects/{project}/messages/{message}', [MessageController::class, 'destroy']);
     Route::get('/projects/{project}/messages/poll', [MessageController::class, 'poll']);
+
+    // Project Budget Management
+    Route::get('/projects/{project}/budget', [ProjectBudgetController::class, 'index']);
+    Route::put('/projects/{project}/budget', [ProjectBudgetController::class, 'updateBudget']);
+    Route::post('/projects/{project}/budget/members', [ProjectBudgetController::class, 'storeMemberBudget']);
+    Route::delete('/projects/{project}/budget/members/{budget}', [ProjectBudgetController::class, 'destroyMemberBudget']);
+    Route::post('/projects/{project}/budget/expenses', [ProjectBudgetController::class, 'storeExpense']);
+    Route::delete('/projects/{project}/budget/expenses/{expense}', [ProjectBudgetController::class, 'destroyExpense']);
     
     // User Management (RBAC)
     Route::apiResource('users', UserController::class);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MessageController extends Controller
 {
@@ -15,7 +16,7 @@ class MessageController extends Controller
     public function index(Request $request, Project $project)
     {
         $messages = $project->messages()
-            ->with(['user:id,name,email', 'replyTo:id,content,user_id', 'replyTo.user:id,name'])
+            ->with(['user:id,name,email', 'task:id,title', 'replyTo:id,content,user_id', 'replyTo.user:id,name'])
             ->orderBy('created_at', 'desc')
             ->paginate(50);
 
@@ -36,17 +37,48 @@ class MessageController extends Controller
     public function store(Request $request, Project $project)
     {
         $validated = $request->validate([
-            'content' => 'required|string|max:5000',
+            'content' => 'nullable|string|max:5000',
+            'task_id' => 'nullable|exists:tasks,id',
             'reply_to_id' => 'nullable|exists:messages,id',
+            'attachment' => 'nullable|file|max:10240', // 10MB max
+            'attachment_type' => 'nullable|in:image,file,voice',
         ]);
+
+        // Either content or attachment is required
+        if (empty($validated['content']) && !$request->hasFile('attachment')) {
+            return response()->json(['message' => 'Content or attachment is required'], 422);
+        }
+
+        $attachmentPath = null;
+        $attachmentType = null;
+        $attachmentName = null;
+
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentType = $validated['attachment_type'] ?? 'file';
+            
+            // Determine folder based on type
+            $folder = match($attachmentType) {
+                'image' => 'chat/images',
+                'voice' => 'chat/voices',
+                default => 'chat/files',
+            };
+            
+            $attachmentPath = $file->store($folder, 'public');
+        }
 
         $message = $project->messages()->create([
             'user_id' => $request->user()->id,
-            'content' => $validated['content'],
+            'content' => $validated['content'] ?? '',
+            'task_id' => $validated['task_id'] ?? null,
             'reply_to_id' => $validated['reply_to_id'] ?? null,
+            'attachment_path' => $attachmentPath,
+            'attachment_type' => $attachmentType,
+            'attachment_name' => $attachmentName,
         ]);
 
-        $message->load(['user:id,name,email', 'replyTo:id,content,user_id', 'replyTo.user:id,name']);
+        $message->load(['user:id,name,email', 'task:id,title', 'replyTo:id,content,user_id', 'replyTo.user:id,name']);
 
         return response()->json([
             'message' => 'Message sent successfully',
@@ -69,6 +101,11 @@ class MessageController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
+        // Delete attachment if exists
+        if ($message->attachment_path) {
+            Storage::disk('public')->delete($message->attachment_path);
+        }
+
         $message->delete();
 
         return response()->json(['message' => 'Message deleted successfully']);
@@ -82,7 +119,7 @@ class MessageController extends Controller
         $since = $request->query('since');
         
         $query = $project->messages()
-            ->with(['user:id,name,email', 'replyTo:id,content,user_id', 'replyTo.user:id,name'])
+            ->with(['user:id,name,email', 'task:id,title', 'replyTo:id,content,user_id', 'replyTo.user:id,name'])
             ->orderBy('created_at', 'asc');
 
         if ($since) {

@@ -1,0 +1,109 @@
+{
+  "nav": {
+    "features": "Features",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "dashboard": "Go to Dashboard",
+    "login": "Log in",
+    "signup": "Sign up"
+  },
+  "hero": {
+    "headline": "One app to replace them all.",
+    "subheadline": "All of your work in one place: Tasks, Docs, Chat, Goals, & more. Mandor gives you the power to manage projects simply and effectively.",
+    "cta_primary": "Get Started for Free",
+    "cta_secondary": "Live Demo",
+    "free_forever": "Free forever. No credit card required."
+  },
+  "features": {
+    "section_title": "Everything you need",
+    "section_subtitle": "Simplify your workflow",
+    "section_desc": "Stop switching between apps. Mandor brings all your project management tools together in one intuitive platform.",
+    "views_title": "Flexible Views",
+    "views_desc": "Visualize your work with Kanban boards, Lists, and Gantt charts. Customize views to match your team's style.",
+    "chat_title": "Real-time Chat",
+    "chat_desc": "Communicate with your team directly within tasks and projects. No more scattered email threads.",
+    "automation_title": "Automation",
+    "automation_desc": "Save time by automating repetitive tasks. Set triggers and actions to keep your projects moving forward."
+  },
+  "values": {
+    "title": "Built for teams that move fast",
+    "task_mgmt_title": "Task Management",
+    "task_mgmt_desc": "Break down complex projects into manageable tasks and subtasks.",
+    "collab_title": "Team Collaboration",
+    "collab_desc": "Assign roles, mention team members, and track progress together.",
+    "secure_title": "Secure & Reliable",
+    "secure_desc": "Enterprise-grade security to keep your data safe and accessible."
+  },
+  "footer": {
+    "desc": "Making project management accessible, flexible, and powerful for everyone.",
+    "product": "Product",
+    "company": "Company",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "rights": "All rights reserved."
+  },
+  "dashboard": {
+    "due_today": "Due Today",
+    "overdue": "Overdue",
+    "todays_tasks": "Today's Tasks",
+    "overdue_tasks": "Overdue Tasks",
+    "no_tasks_today": "No tasks due today. Great job!",
+    "no_overdue_tasks": "No overdue tasks. Keep it up!",
+    "recent_workspaces": "Recent Workspaces",
+    "view_all": "View all",
+    "no_workspaces": "No workspaces yet.",
+    "create_workspace": "Create your first workspace",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "todo": "To Do",
+    "owner": "Owner",
+    "failed_load": "Failed to load dashboard data",
+    "greeting_sub": "Here's what's happening with your tasks today."
+  },
+  "auth": {
+    "login": {
+        "title": "Welcome back",
+        "subtitle": "Please sign in to your account",
+        "submit": "Sign In",
+        "submitting": "Signing in...",
+        "no_account": "Don't have an account?",
+        "create_account": "Create account",
+        "success": "Welcome back! Login successful",
+        "failed": "Login failed. Please check your credentials."
+    },
+    "register": {
+        "title": "Create an account",
+        "subtitle": "Join Mandor to manage your projects",
+        "submit": "Register",
+        "submitting": "Creating account...",
+        "has_account": "Already have an account?",
+        "signin": "Sign In",
+        "failed": "Registration failed"
+    },
+    "fields": {
+        "email": "Email Address",
+        "password": "Password",
+        "name": "Full Name",
+        "confirm_password": "Confirm Password",
+        "placeholder_email": "name@example.com",
+        "placeholder_password": "••••••••"
+    }
+  },
+  "layout": {
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "workspaces": "Workspaces",
+        "administration": "Administration",
+        "users": "Users",
+        "roles": "Roles"
+    },
+    "navbar": {
+        "notifications": "Notifications",
+        "no_notifications": "No notifications",
+        "profile_settings": "Profile Settings",
+        "logout": "Logout",
+        "sent_message": "sent a message in",
+        "commented_on": "commented on"
+    }
+  }
+}

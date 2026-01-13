@@ -1,13 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { useParams, Link } from 'react-router-dom';
-import { Plus, ArrowLeft, Calendar, User, Flag, MoreHorizontal, X, List, LayoutGrid, GanttChartSquare, Layers, Settings, MessageSquare } from 'lucide-react';
+import { Plus, ArrowLeft, Calendar, User, Flag, MoreHorizontal, X, List, LayoutGrid, GanttChartSquare, Layers, Settings, MessageSquare, Wallet, Info } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import KanbanBoard from '@/components/KanbanBoard';
 import GanttChart from '@/components/GanttChart';
 import SprintBoard from '@/components/SprintBoard';
 import TaskDetail from '@/components/TaskDetail';
 import ProjectChat from '@/components/ProjectChat';
+import ProjectBudget from '@/components/ProjectBudget';
+import ProjectDetail from '@/components/ProjectDetail';
+import ProjectStatusManager from '@/components/ProjectStatusManager';
 
 const fetchProject = async (id) => {
     const { data } = await api.get(`/projects/${id}`);
@@ -246,6 +249,10 @@ const ProjectBoard = () => {
     const [viewMode, setViewMode] = useState('kanban'); // 'list' or 'kanban'
     const [defaultStatusId, setDefaultStatusId] = useState(null);
     const [showChat, setShowChat] = useState(false);
+    const [chatTask, setChatTask] = useState(null);
+    const [showBudget, setShowBudget] = useState(false);
+    const [showProjectDetail, setShowProjectDetail] = useState(false);
+    const [showStatusManager, setShowStatusManager] = useState(false);
 
     const { data: project, isLoading: projLoading } = useQuery({
         queryKey: ['project', id],
@@ -260,6 +267,16 @@ const ProjectBoard = () => {
     const { data: tasks, isLoading: taskLoading } = useQuery({
         queryKey: ['tasks', id],
         queryFn: () => fetchTasks(id),
+    });
+
+    // Fetch workspace members for chat mentions
+    const { data: members } = useQuery({
+        queryKey: ['workspace-members', project?.workspace_id],
+        queryFn: async () => {
+            const { data } = await api.get(`/workspaces/${project?.workspace_id}/members`);
+            return data.data;
+        },
+        enabled: !!project?.workspace_id,
     });
 
     const deleteMutation = useMutation({
@@ -312,6 +329,20 @@ const ProjectBoard = () => {
                     <span className="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs font-mono rounded">
                         {project?.key}
                     </span>
+                    <button
+                        onClick={() => setShowProjectDetail(true)}
+                        className="p-1.5 text-zinc-400 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
+                        title="Project Details"
+                    >
+                        <Info className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={() => setShowStatusManager(true)}
+                        className="p-1.5 text-zinc-400 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
+                        title="Manage Statuses"
+                    >
+                        <Settings className="w-5 h-5" />
+                    </button>
                     {/* Sprint Toggle */}
                     <button
                         onClick={() => {
@@ -387,6 +418,13 @@ const ProjectBoard = () => {
                         Chat
                     </button>
                     <button
+                        onClick={() => setShowBudget(true)}
+                        className="flex items-center gap-2 px-3 py-2 text-zinc-600 dark:text-zinc-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-medium rounded-lg transition-colors"
+                    >
+                        <Wallet className="w-4 h-4" />
+                        Budget
+                    </button>
+                    <button
                         onClick={() => { setEditingTask(null); setDefaultStatusId(null); setShowModal(true); }}
                         className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors"
                     >
@@ -403,6 +441,7 @@ const ProjectBoard = () => {
                     tasks={tasks || []}
                     projectId={id}
                     onTaskClick={(task) => setSelectedTask(task)}
+                    onChatClick={(task) => { setChatTask(task); setShowChat(true); }}
                     onAddTask={(statusId) => { setEditingTask(null); setDefaultStatusId(statusId); setShowModal(true); }}
                 />
             )}
@@ -526,7 +565,31 @@ const ProjectBoard = () => {
             <ProjectChat
                 projectId={id}
                 isOpen={showChat}
-                onClose={() => setShowChat(false)}
+                onClose={() => { setShowChat(false); setChatTask(null); }}
+                tasks={tasks || []}
+                members={members || []}
+                initialTask={chatTask}
+            />
+
+            {/* Project Budget */}
+            <ProjectBudget
+                projectId={id}
+                isOpen={showBudget}
+                onClose={() => setShowBudget(false)}
+                members={members || []}
+            />
+
+            <ProjectDetail
+                projectId={id}
+                isOpen={showProjectDetail}
+                onClose={() => setShowProjectDetail(false)}
+            />
+
+            <ProjectStatusManager
+                isOpen={showStatusManager}
+                onClose={() => setShowStatusManager(false)}
+                projectId={id}
+                statuses={statuses || []}
             />
         </div>
     );

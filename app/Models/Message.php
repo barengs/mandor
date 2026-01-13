@@ -10,8 +10,12 @@ class Message extends Model
 {
     protected $fillable = [
         'project_id',
+        'task_id',
         'user_id',
         'content',
+        'attachment_path',
+        'attachment_type',
+        'attachment_name',
         'reply_to_id',
     ];
 
@@ -23,6 +27,11 @@ class Message extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function task(): BelongsTo
+    {
+        return $this->belongsTo(Task::class);
     }
 
     public function replyTo(): BelongsTo

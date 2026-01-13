@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
+    const { t } = useTranslation();
     const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -15,8 +18,10 @@ const Login = () => {
         setError(null);
         try {
             await login({ email, password });
+            toast.success(t('auth.login.success'));
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            setError(err.response?.data?.message || t('auth.login.failed'));
+            toast.error(t('auth.login.failed'));
         } finally {
             setIsLoading(false);
         }
@@ -25,8 +30,8 @@ const Login = () => {
     return (
         <div>
             <div className="mb-8 text-center">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Welcome back</h2>
-                <p className="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">Please sign in to your account</p>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">{t('auth.login.title')}</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 mt-2 text-sm">{t('auth.login.subtitle')}</p>
             </div>
             
             {error && (
@@ -39,13 +44,13 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="email">
-                        Email Address
+                        {t('auth.fields.email')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                         id="email"
                         type="email"
-                        placeholder="name@example.com"
+                        placeholder={t('auth.fields.placeholder_email')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -53,13 +58,13 @@ const Login = () => {
                 </div>
                 <div>
                     <label className="block text-zinc-700 dark:text-zinc-300 text-sm font-medium mb-2" htmlFor="password">
-                        Password
+                        {t('auth.fields.password')}
                     </label>
                     <input
                         className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                         id="password"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={t('auth.fields.placeholder_password')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -77,17 +82,17 @@ const Login = () => {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span>Signing in...</span>
+                            <span>{t('auth.login.submitting')}</span>
                         </>
                     ) : (
-                        'Sign In'
+                        t('auth.login.submit')
                     )}
                 </button>
 
                 <div className="mt-6 text-center text-sm">
-                    <span className="text-zinc-600 dark:text-zinc-400">Don't have an account? </span>
+                    <span className="text-zinc-600 dark:text-zinc-400">{t('auth.login.no_account')} </span>
                     <Link to="/register" className="font-semibold text-orange-600 hover:text-orange-500 dark:text-orange-500 dark:hover:text-orange-400 transition-colors">
-                        Create account
+                        {t('auth.login.create_account')}
                     </Link>
                 </div>
             </form>

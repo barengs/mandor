@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $fillable = ['workspace_id', 'name', 'key', 'has_sprints'];
+    protected $fillable = ['workspace_id', 'name', 'key', 'has_sprints', 'total_budget', 'currency'];
 
     protected $casts = [
         'has_sprints' => 'boolean',
+        'total_budget' => 'decimal:2',
     ];
 
     public function workspace()
@@ -35,6 +36,40 @@ class Project extends Model
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function memberBudgets()
+    {
+        return $this->hasMany(ProjectMemberBudget::class);
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(ProjectExpense::class);
+    }
+
+    /**
+     * Get total allocated budget to members
+     */
+    public function getAllocatedBudgetAttribute()
+    {
+        return $this->memberBudgets()->sum('total_amount');
+    }
+
+    /**
+     * Get total expenses
+     */
+    public function getTotalExpensesAttribute()
+    {
+        return $this->expenses()->sum('amount');
+    }
+
+    /**
+     * Get remaining budget
+     */
+    public function getRemainingBudgetAttribute()
+    {
+        return $this->total_budget - $this->total_expenses;
     }
 
     /**

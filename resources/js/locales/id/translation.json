@@ -1,0 +1,109 @@
+{
+  "nav": {
+    "features": "Fitur",
+    "solutions": "Solusi",
+    "pricing": "Harga",
+    "dashboard": "Ke Dashboard",
+    "login": "Masuk",
+    "signup": "Daftar"
+  },
+  "hero": {
+    "headline": "Satu aplikasi untuk segalanya.",
+    "subheadline": "Semua pekerjaan Anda di satu tempat: Tugas, Dokumen, Obrolan, Tujuan, & lainnya. Mandor memberi Anda kekuatan untuk mengelola proyek secara sederhana dan efektif.",
+    "cta_primary": "Mulai Gratis",
+    "cta_secondary": "Demo Langsung",
+    "free_forever": "Gratis selamanya. Tidak perlu kartu kredit."
+  },
+  "features": {
+    "section_title": "Semua yang Anda butuhkan",
+    "section_subtitle": "Sederhanakan alur kerja Anda",
+    "section_desc": "Berhenti berpindah antar aplikasi. Mandor menyatukan semua alat manajemen proyek Anda dalam satu platform yang intuitif.",
+    "views_title": "Tampilan Fleksibel",
+    "views_desc": "Visualisasikan pekerjaan Anda dengan papan Kanban, Daftar, dan grafik Gantt. Sesuaikan tampilan dengan gaya tim Anda.",
+    "chat_title": "Obrolan Real-time",
+    "chat_desc": "Berkomunikasi dengan tim Anda langsung di dalam tugas dan proyek. Tidak ada lagi utas email yang tersebar.",
+    "automation_title": "Otomatisasi",
+    "automation_desc": "Hemat waktu dengan mengotomatiskan tugas berulang. Atur pemicu dan tindakan untuk menjaga proyek Anda terus berjalan."
+  },
+  "values": {
+    "title": "Dibangun untuk tim yang bergerak cepat",
+    "task_mgmt_title": "Manajemen Tugas",
+    "task_mgmt_desc": "Pecah proyek kompleks menjadi tugas dan subtugas yang dapat dikelola.",
+    "collab_title": "Kolaborasi Tim",
+    "collab_desc": "Tetapkan peran, sebutkan anggota tim, dan lacak kemajuan bersama.",
+    "secure_title": "Aman & Terpercaya",
+    "secure_desc": "Keamanan tingkat perusahaan untuk menjaga data Anda tetap aman dan dapat diakses."
+  },
+  "footer": {
+    "desc": "Membuat manajemen proyek dapat diakses, fleksibel, dan kuat untuk semua orang.",
+    "product": "Produk",
+    "company": "Perusahaan",
+    "privacy": "Kebijakan Privasi",
+    "terms": "Syarat Layanan",
+    "rights": "Hak cipta dilindungi undang-undang."
+  },
+  "dashboard": {
+    "due_today": "Tenggat Hari Ini",
+    "overdue": "Terlambat",
+    "todays_tasks": "Tugas Hari Ini",
+    "overdue_tasks": "Tugas Terlambat",
+    "no_tasks_today": "Tidak ada tugas hari ini. Kerja bagus!",
+    "no_overdue_tasks": "Tidak ada tugas terlambat. Pertahankan!",
+    "recent_workspaces": "Workspace Terbaru",
+    "view_all": "Lihat semua",
+    "no_workspaces": "Belum ada workspace.",
+    "create_workspace": "Buat workspace pertama Anda",
+    "projects": "Proyek",
+    "tasks": "Tugas",
+    "todo": "To Do",
+    "owner": "Pemilik",
+    "failed_load": "Gagal memuat data dashboard",
+    "greeting_sub": "Inilah yang terjadi dengan tugas Anda hari ini."
+  },
+  "auth": {
+    "login": {
+        "title": "Selamat Datang Kembali",
+        "subtitle": "Silakan masuk ke akun Anda",
+        "submit": "Masuk",
+        "submitting": "Sedang masuk...",
+        "no_account": "Belum punya akun?",
+        "create_account": "Buat akun",
+        "success": "Selamat datang kembali! Login berhasil",
+        "failed": "Login gagal. Periksa kembali kredensial Anda."
+    },
+    "register": {
+        "title": "Buat akun baru",
+        "subtitle": "Bergabung dengan Mandor untuk mengelola proyek Anda",
+        "submit": "Daftar",
+        "submitting": "Membuat akun...",
+        "has_account": "Sudah punya akun?",
+        "signin": " Masuk",
+        "failed": "Registrasi gagal"
+    },
+    "fields": {
+        "email": "Alamat Email",
+        "password": "Kata Sandi",
+        "name": "Nama Lengkap",
+        "confirm_password": "Konfirmasi Kata Sandi",
+        "placeholder_email": "nama@contoh.com",
+        "placeholder_password": "••••••••"
+    }
+  },
+  "layout": {
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "workspaces": "Workspace",
+        "administration": "Administrasi",
+        "users": "Pengguna",
+        "roles": "Peran"
+    },
+    "navbar": {
+        "notifications": "Notifikasi",
+        "no_notifications": "Tidak ada notifikasi",
+        "profile_settings": "Pengaturan Profil",
+        "logout": "Keluar",
+        "sent_message": "mengirim pesan di",
+        "commented_on": "mengomentari"
+    }
+  }
+}

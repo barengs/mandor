@@ -3,6 +3,7 @@ import api from '@/lib/axios';
 import { useParams, Link } from 'react-router-dom';
 import { Plus, FolderKanban, ArrowLeft, MoreHorizontal, Users } from 'lucide-react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const fetchWorkspace = async (id) => {
     const { data } = await api.get(`/workspaces/${id}`);
@@ -38,6 +39,10 @@ const WorkspaceDetail = () => {
             setShowModal(false);
             setProjectName('');
             setProjectKey('');
+            toast.success('Project created successfully!');
+        },
+        onError: () => {
+            toast.error('Failed to create project');
         },
     });
 

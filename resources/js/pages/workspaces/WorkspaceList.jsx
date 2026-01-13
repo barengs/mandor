@@ -3,6 +3,7 @@ import api from '@/lib/axios';
 import { Plus, Building2, Users, FolderKanban } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const fetchWorkspaces = async () => {
     const { data } = await api.get('/workspaces');
@@ -25,6 +26,10 @@ const WorkspaceList = () => {
             queryClient.invalidateQueries({ queryKey: ['workspaces'] });
             setShowModal(false);
             setNewWorkspaceName('');
+            toast.success('Workspace created successfully!');
+        },
+        onError: () => {
+            toast.error('Failed to create workspace');
         },
     });
 

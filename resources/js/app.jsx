@@ -1,15 +1,18 @@
 import './bootstrap';
+import './i18n'; // Import i18n config
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 
 // Layouts
 import GuestLayout from './layouts/GuestLayout';
 import AppLayout from './layouts/AppLayout';
 
 // Pages
+import LandingPage from './pages/LandingPage';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Dashboard from './pages/Dashboard';
@@ -21,6 +24,7 @@ import UserManagement from './pages/users/UserManagement';
 import UserDetail from './pages/users/UserDetail';
 import RoleManagement from './pages/users/RoleManagement';
 import Profile from './pages/Profile';
+import ProjectReport from './components/ProjectReport';
 
 const queryClient = new QueryClient();
 
@@ -41,7 +45,7 @@ const GuestRoute = ({ children }) => {
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Navigate to="/dashboard" replace />,
+        element: <LandingPage />,
     },
     {
         path: '/login',
@@ -72,6 +76,10 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><ProjectBoard /></ProtectedRoute>,
     },
     {
+        path: '/projects/:id/report',
+        element: <ProtectedRoute><ProjectReport /></ProtectedRoute>,
+    },
+    {
         path: '/users',
         element: <ProtectedRoute><UserManagement /></ProtectedRoute>,
     },
@@ -94,6 +102,22 @@ ReactDOM.createRoot(document.getElementById('app')).render(
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <RouterProvider router={router} />
+                <Toaster 
+                    position="top-right"
+                    toastOptions={{
+                        duration: 4000,
+                        style: {
+                            background: '#18181b',
+                            color: '#fff',
+                        },
+                        success: {
+                            iconTheme: {
+                                primary: '#f97316',
+                                secondary: '#fff',
+                            },
+                        },
+                    }}
+                />
             </AuthProvider>
         </QueryClientProvider>
     </React.StrictMode>

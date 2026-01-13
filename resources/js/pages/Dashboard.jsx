@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/axios';
 import { Calendar, AlertTriangle, Clock, ArrowRight, FolderKanban, CheckSquare, ListTodo } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const fetchDashboard = async () => {
     const { data } = await api.get('/dashboard');
@@ -32,6 +33,7 @@ const TaskCard = ({ task }) => (
 );
 
 const Dashboard = () => {
+    const { t } = useTranslation();
     const { data, isLoading, error } = useQuery({
         queryKey: ['dashboard'],
         queryFn: fetchDashboard,
@@ -55,7 +57,7 @@ const Dashboard = () => {
         return (
             <div className="p-8">
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-4 rounded-lg">
-                    Failed to load dashboard data
+                    {t('dashboard.failed_load')}
                 </div>
             </div>
         );
@@ -69,7 +71,7 @@ const Dashboard = () => {
                     {data.greeting}
                 </h1>
                 <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-                    Here's what's happening with your tasks today.
+                    {t('dashboard.greeting_sub')}
                 </p>
             </div>
 
@@ -84,7 +86,7 @@ const Dashboard = () => {
                             <p className="text-2xl font-bold text-zinc-900 dark:text-white">
                                 {data.stats.tasks_due_today}
                             </p>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400">Due Today</p>
+                            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('dashboard.due_today')}</p>
                         </div>
                     </div>
                 </div>
@@ -98,7 +100,7 @@ const Dashboard = () => {
                             <p className="text-2xl font-bold text-zinc-900 dark:text-white">
                                 {data.stats.tasks_overdue}
                             </p>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400">Overdue</p>
+                            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('dashboard.overdue')}</p>
                         </div>
                     </div>
                 </div>
@@ -111,7 +113,7 @@ const Dashboard = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
                             <Clock className="w-5 h-5 text-orange-500" />
-                            Today's Tasks
+                            {t('dashboard.todays_tasks')}
                         </h2>
                     </div>
                     <div className="space-y-3">
@@ -121,7 +123,7 @@ const Dashboard = () => {
                             ))
                         ) : (
                             <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center py-8">
-                                No tasks due today. Great job!
+                                {t('dashboard.no_tasks_today')}
                             </p>
                         )}
                     </div>
@@ -132,7 +134,7 @@ const Dashboard = () => {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-zinc-900 dark:text-white flex items-center gap-2">
                             <AlertTriangle className="w-5 h-5 text-red-500" />
-                            Overdue Tasks
+                            {t('dashboard.overdue_tasks')}
                         </h2>
                     </div>
                     <div className="space-y-3">
@@ -142,7 +144,7 @@ const Dashboard = () => {
                             ))
                         ) : (
                             <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center py-8">
-                                No overdue tasks. Keep it up!
+                                {t('dashboard.no_overdue_tasks')}
                             </p>
                         )}
                     </div>
@@ -153,13 +155,13 @@ const Dashboard = () => {
             <div className="mt-6">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">
-                        Recent Workspaces
+                        {t('dashboard.recent_workspaces')}
                     </h2>
                     <Link
                         to="/workspaces"
                         className="text-sm text-orange-600 dark:text-orange-500 hover:underline flex items-center gap-1"
                     >
-                        View all <ArrowRight className="w-4 h-4" />
+                        {t('dashboard.view_all')} <ArrowRight className="w-4 h-4" />
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -174,32 +176,32 @@ const Dashboard = () => {
                                     {workspace.name}
                                 </h3>
                                 <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                                    Owner: {workspace.owner?.name}
+                                    {t('dashboard.owner')}: {workspace.owner?.name}
                                 </p>
                                 <div className="flex items-center gap-4 mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
                                     <div className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400">
                                         <FolderKanban className="w-4 h-4" />
-                                        <span>{workspace.projects_count} Projects</span>
+                                        <span>{workspace.projects_count} {t('dashboard.projects')}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-sm text-zinc-600 dark:text-zinc-400">
                                         <CheckSquare className="w-4 h-4" />
-                                        <span>{workspace.tasks_count} Tasks</span>
+                                        <span>{workspace.tasks_count} {t('dashboard.tasks')}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-sm text-orange-600 dark:text-orange-400">
                                         <ListTodo className="w-4 h-4" />
-                                        <span>{workspace.todo_count} To Do</span>
+                                        <span>{workspace.todo_count} {t('dashboard.todo')}</span>
                                     </div>
                                 </div>
                             </Link>
                         ))
                     ) : (
                         <div className="col-span-3 text-center py-8 text-zinc-500 dark:text-zinc-400">
-                            <p>No workspaces yet.</p>
+                            <p>{t('dashboard.no_workspaces')}</p>
                             <Link
                                 to="/workspaces"
                                 className="text-orange-600 dark:text-orange-500 hover:underline mt-2 inline-block"
                             >
-                                Create your first workspace
+                                {t('dashboard.create_workspace')}
                             </Link>
                         </div>
                     )}
