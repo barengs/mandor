@@ -1,59 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mandor - Project Management Tool
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Mandor is a modern, full-featured project management application designed to streamline team collaboration and task tracking. Built with a robust Laravel backend and a dynamic React frontend, it offers a seamless experience for managing workspaces, projects, and tasks.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Workspace Management**: Organize your projects into distinct workspaces.
+-   **Project Tracking**: Create and manage projects with ease.
+-   **Kanban Board**: Visual task management with drag-and-drop support.
+-   **Dynamic Statuses**: Customizable project workflow statuses.
+-   **Multi-language Support**: Fully localized in English and Indonesian (Bahasa Indonesia).
+-   **Authentication**: Secure user registration and login system.
+-   **Responsive Design**: Optimized for both desktop and mobile devices.
+-   **Dark Mode**: Built-in support for light and dark themes.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Frontend
 
-## Learning Laravel
+-   **React 18**: Library for building user interfaces.
+-   **Vite**: Next Generation Frontend Tooling.
+-   **Tailwind CSS**: Utility-first CSS framework for styling.
+-   **React Router DOM**: Client-side routing.
+-   **TanStack Query**: Powerful asynchronous state management.
+-   **i18next**: Internationalization framework.
+-   **Lucide React**: Beautiful & consistent icons.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Backend
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   **Laravel 11**: The PHP Framework for Web Artisans.
+-   **MySQL**: Relational database management system.
+-   **Sanctum**: API authentication system.
 
-## Laravel Sponsors
+## ⚙️ Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Follow these steps to set up the project locally.
 
-### Premium Partners
+### Prerequisites
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+-   PHP >= 8.2
+-   Composer
+-   Node.js & npm
+-   MySQL
 
-## Contributing
+### Backend Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1.  **Clone the repository**
 
-## Code of Conduct
+    ```bash
+    git clone https://github.com/yourusername/mandor.git
+    cd mandor
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2.  **Install PHP dependencies**
 
-## Security Vulnerabilities
+    ```bash
+    composer install
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3.  **Environment Configuration**
+    Copy the example env file and configure your database settings.
 
-## License
+    ```bash
+    cp .env.example .env
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    Update `.env` with your database credentials:
+
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=mandor
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+4.  **Generate App Key**
+
+    ```bash
+    php artisan key:generate
+    ```
+
+5.  **Run Migrations**
+
+    ```bash
+    php artisan migrate
+    ```
+
+6.  **Serve Application**
+    ```bash
+    php artisan serve
+    ```
+
+### Frontend Setup
+
+1.  **Install Node dependencies**
+
+    ```bash
+    npm install
+    ```
+
+2.  **Start Development Server**
+    ```bash
+    npm run dev
+    ```
+
+The application should now be accessible at `http://localhost:5173` (or the URL provided by Vite), communicating with the Laravel backend at `http://localhost:8000`.
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
