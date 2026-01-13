@@ -160,5 +160,9 @@ class DatabaseSeeder extends Seeder
             'user_id' => $dev2->id,
             'content' => 'Will do, currently writing tests.',
         ]);
+
+        $this->call([
+            RolePermissionSeeder::class,
+        ]);
     }
 }
