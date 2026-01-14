@@ -20,6 +20,11 @@ class Task extends Model
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
+        'status_id' => 'integer',
+        'sprint_id' => 'integer',
+        'creator_id' => 'integer',
+        'order' => 'integer',
         'start_date' => 'datetime',
         'due_date' => 'datetime',
     ];

@@ -19,6 +19,8 @@ class Sprint extends Model
     ];
 
     protected $casts = [
+        'project_id' => 'integer',
+        'order' => 'integer',
         'start_date' => 'date',
         'end_date' => 'date',
     ];
